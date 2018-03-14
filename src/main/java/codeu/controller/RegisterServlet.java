@@ -1,8 +1,7 @@
 /*
  * RegisterServlet.java
- * This code uses the response.getWriter().println() function to output HTML<br>
- * directly from the servlet. Eventually we'll want to use a JSP file to render HTML,<br>
- * but for now we just want to get something working.
+ * This code uses the request.getRequestDispatcher() function to output the
+ * register.jsp file 
  */
 
 package codeu.controller;
