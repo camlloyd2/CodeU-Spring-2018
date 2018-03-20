@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class RegisterServletTest {
 
@@ -65,6 +66,7 @@ public class RegisterServletTest {
   @Test
   public void testDoPost_NewUser() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("username")).thenReturn("test username");
+    Mockito.when(mockRequest.getParameter("password")).thenReturn("test password");
 
     UserStore mockUserStore = Mockito.mock(UserStore.class);
     Mockito.when(mockUserStore.isUserRegistered("test username")).thenReturn(false);
@@ -79,6 +81,9 @@ public class RegisterServletTest {
 
     Mockito.verify(mockUserStore).addUser(userArgumentCaptor.capture());
     Assert.assertEquals(userArgumentCaptor.getValue().getName(), "test username");
+
+    boolean isPasswordCorrect = BCrypt.checkpw("test password", userArgumentCaptor.getValue().getPassword());
+    Assert.assertEquals(isPasswordCorrect, true);
 
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
@@ -100,4 +105,5 @@ public class RegisterServletTest {
 
     Mockito.verify(mockRequest).setAttribute("error", "That username is already taken.");
   }
+
 }
