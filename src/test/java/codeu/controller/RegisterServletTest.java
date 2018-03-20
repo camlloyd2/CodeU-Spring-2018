@@ -51,6 +51,17 @@ public class RegisterServletTest {
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
+   @Test
+ public void testDoPost_EmptyUsername() throws IOException, ServletException {
+    Mockito.when(mockRequest.getParameter("username")).thenReturn("");
+
+    registerServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(mockRequest)
+        .setAttribute("error", "Please enter username.");
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+  }
+
   @Test
   public void testDoPost_NewUser() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("username")).thenReturn("test username");
