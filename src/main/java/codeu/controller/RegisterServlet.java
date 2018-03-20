@@ -71,8 +71,7 @@ public class RegisterServlet extends HttpServlet {
      return;
    }
 
-    if (userStore.
-    	isUserRegistered(username)) {
+    if (userStore.isUserRegistered(username)) {
      request.setAttribute("error", "That username is already taken.");
      request.getRequestDispatcher("/WEB-INF/view/register.jsp").forward(request, response);
      return;
