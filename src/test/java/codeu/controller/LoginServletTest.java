@@ -74,6 +74,21 @@ public class LoginServletTest {
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
 
+  @Test
+  public void testDoPost_EmptyCredentials() throws IOException, ServletException {
+    Mockito.when(mockRequest.getParameter("username")).thenReturn("");
+    Mockito.when(mockRequest.getParameter("password")).thenReturn("");
+    UserStore mockUserStore = Mockito.mock(UserStore.class);
+    Mockito.when(mockUserStore.isUserRegistered("")).thenReturn(false);
+    loginServlet.setUserStore(mockUserStore);
+    HttpSession mockSession = Mockito.mock(HttpSession.class);
+    Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
+
+    loginServlet.doPost(mockRequest, mockResponse);
+    Mockito.verify(mockRequest).setAttribute("error", "That username was not found.");
+    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
+
+  }
 
   @Test
   public void testDoPost_UserNotFound() throws IOException, ServletException {
