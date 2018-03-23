@@ -20,6 +20,7 @@
    <% } else{ %>
      <a href="/login">Login</a>
    <% } %>
+   <a href="/about.jsp">About</a>
  </nav>
 
  <div id="container">
