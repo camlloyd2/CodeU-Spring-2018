@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/*
+ * 2018/4/3 Huihan added profile variable to User
+ */
+
+
 package codeu.model.data;
 
 import java.time.Instant;
@@ -23,6 +28,7 @@ public class User {
   private final String name;
   private final String hashedPassword;
   private final Instant creation;
+  private String profile;
 
   /**
    * Constructs a new User.
@@ -37,6 +43,7 @@ public class User {
     this.name = name;
     this.hashedPassword = password;
     this.creation = creation;
+    this.profile = "My name is" + name;
   }
 
   /** Returns the ID of this User. */
@@ -56,5 +63,13 @@ public class User {
   /** Returns the creation time of this User. */
   public Instant getCreationTime() {
     return creation;
+  }
+
+  public String getProfile() {
+    return profile;
+  }
+
+  public void setProfile(String profile) {
+    this.profile = profile;
   }
 }

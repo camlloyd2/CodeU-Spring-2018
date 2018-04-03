@@ -47,8 +47,20 @@ public class ProfileServlet extends HttpServlet {
  @Override
  public void doGet(HttpServletRequest request, HttpServletResponse response)
      throws IOException, ServletException {
+    String requestUrl = request.getRequestURI();
+    String userName = requestUrl.substring("/users/".length());
 
+    User user = userStore.getUser(userName);
+    if (user == null) {
+      // couldn't find user, redirect to registration page
+      System.out.println("User does not exist: " + userName);
+      response.sendRedirect("/register");
+      return;
+    }
 
-   request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
- }
+    request.setAttribute("user", user);
+    request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
+  }
+
+   
 }
