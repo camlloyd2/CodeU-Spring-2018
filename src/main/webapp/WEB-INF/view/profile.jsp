@@ -56,7 +56,7 @@
         <%= profile %>
       </p>
 
-      <form action='/users/<%= request.getSession().getAttribute("user") %>' method="POST">
+      <form action='/profile/<%= request.getSession().getAttribute("user") %>' method="POST">
           <div class="form-group">
             <h3>Edit your About Me (only you can see this)</h3>
           <input type="text" name="userAboutMe">

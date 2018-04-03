@@ -47,7 +47,7 @@ public class ProfileServletTest {
 
  @Test
  public void testDoGet() throws IOException, ServletException {
-   Mockito.when(mockRequest.getRequestURI()).thenReturn("/users/test_user");
+   Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_user");
 
    UUID fakeUserId = UUID.randomUUID();
 
@@ -65,7 +65,7 @@ public class ProfileServletTest {
 
  @Test
   public void testDoGet_badConversation() throws IOException, ServletException {
-    Mockito.when(mockRequest.getRequestURI()).thenReturn("/users/bad_user");
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/bad_user");
     Mockito.when(mockUserStore.getUser("bad_user"))
         .thenReturn(null);
 

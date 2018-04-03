@@ -48,7 +48,10 @@ public class ProfileServlet extends HttpServlet {
  public void doGet(HttpServletRequest request, HttpServletResponse response)
      throws IOException, ServletException {
     String requestUrl = request.getRequestURI();
-    String userName = requestUrl.substring("/users/".length());
+    System.out.println("requestUrl:" + requestUrl);
+
+    String userName = requestUrl.substring("/profile/".length());
+    System.out.println("userName:" + userName);
 
     User user = userStore.getUser(userName);
     if (user == null) {
