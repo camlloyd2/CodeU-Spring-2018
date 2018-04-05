@@ -15,6 +15,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 /**
 * Servlet class responsible for user registration.
@@ -57,13 +59,43 @@ public class ProfileServlet extends HttpServlet {
     if (user == null) {
       // couldn't find user, redirect to registration page
       System.out.println("User does not exist: " + userName);
-      response.sendRedirect("/register");
+      response.sendRedirect("/login");
       return;
     }
 
     request.setAttribute("user", user);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }
+/*
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
 
-   
+    String username = (String) request.getSession().getAttribute("user");
+    if (username == null) {
+      // user is not logged in, don't let them add a message
+      response.sendRedirect("/login");
+      return;
+    }
+
+    User user = userStore.getUser(username);
+    if (user == null) {
+      // user was not found, don't let them change their profile
+      response.sendRedirect("/login");
+      return;
+    }
+
+
+    String profileContent = request.getParameter("profile");
+
+    // this removes any HTML from the message content
+    String cleanedProfileContent = Jsoup.clean(profileContent, Whitelist.none());
+
+    user.setProfile(cleanedProfileContent);
+
+    // redirect to a GET request
+    response.sendRedirect("/profile/" + username);
+  }
+
+   */
 }

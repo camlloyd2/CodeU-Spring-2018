@@ -26,6 +26,7 @@ public class ProfileServletTest {
  private ProfileServlet profileServlet;
  private HttpServletRequest mockRequest;
  private HttpServletResponse mockResponse;
+ private HttpSession mockSession;
  private RequestDispatcher mockRequestDispatcher;
  private UserStore mockUserStore;
 
@@ -36,6 +37,8 @@ public class ProfileServletTest {
    mockRequest = Mockito.mock(HttpServletRequest.class);
    mockResponse = Mockito.mock(HttpServletResponse.class);
    mockRequestDispatcher = Mockito.mock(RequestDispatcher.class);
+   mockSession = Mockito.mock(HttpSession.class);
+   Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
 
    mockUserStore = Mockito.mock(UserStore.class);
    profileServlet.setUserStore(mockUserStore);
@@ -64,13 +67,83 @@ public class ProfileServletTest {
  }
 
  @Test
-  public void testDoGet_badConversation() throws IOException, ServletException {
+  public void testDoGet_badUser() throws IOException, ServletException {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/bad_user");
     Mockito.when(mockUserStore.getUser("bad_user"))
         .thenReturn(null);
 
     profileServlet.doGet(mockRequest, mockResponse);
 
-    Mockito.verify(mockResponse).sendRedirect("/register");
+    Mockito.verify(mockResponse).sendRedirect("/login");
   }
+/*
+  @Test
+  public void testDoPost_UserNotLoggedIn() throws IOException, ServletException {
+    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
+
+    profileServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(Mockito.any(User.class), Mockito.never()).setProfile(Mockito.any(String.class));
+
+    Mockito.verify(mockResponse).sendRedirect("/login");
+  }
+
+  @Test
+  public void testDoPost_InvalidUser() throws IOException, ServletException {
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(null);
+
+    profileServlet.doPost(mockRequest, mockResponse);
+
+    Mockito.verify(Mockito.any(User.class), Mockito.never()).setProfile(Mockito.any(String.class));
+
+    Mockito.verify(mockResponse).sendRedirect("/login");
+  }
+
+    @Test
+  public void testDoPost_StoresProfile() throws IOException, ServletException {
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_username");
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+
+    User fakeUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+
+    String fakeProfile = "sghow eihgo w48g92 iegw1";
+    Mockito.when(mockRequest.getParameter("profile")).thenReturn(fakeProfile);
+
+    profileServlet.doPost(mockRequest, mockResponse);
+
+
+    ArgumentCaptor<String> profileArgumentCaptor = ArgumentCaptor.forClass(String.class);
+    Assert.assertEquals("sghow eihgo w48g92 iegw1", profileArgumentCaptor.getValue());
+
+    Mockito.verify(fakeUser).setProfile(profileArgumentCaptor.capture());
+
+
+    Mockito.verify(mockResponse).sendRedirect("/profile/test_username");
+  }
+
+  @Test
+  public void testDoPost_CleansHtmlContent() throws IOException, ServletException {
+   Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_username");
+    Mockito.
+    when(mockSession.getAttribute("user")).thenReturn("test_username");
+
+    User fakeUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+
+     String fakeProfile = "Contains <b>html</b> and <script>JavaScript</script> content.";
+ 
+    Mockito.when(mockRequest.getParameter("profile")).thenReturn(fakeProfile);
+
+    profileServlet.doPost(mockRequest, mockResponse);
+
+    ArgumentCaptor<String> profileArgumentCaptor = ArgumentCaptor.forClass(String.class);
+    Assert.assertEquals("Contains html and  content.", profileArgumentCaptor.getValue());
+
+    Mockito.verify(fakeUser).setProfile(profileArgumentCaptor.capture());
+
+    Mockito.verify(mockResponse).sendRedirect("/profile/test_username");
+  }
+  */
 }

@@ -43,7 +43,7 @@ public class User {
     this.name = name;
     this.hashedPassword = password;
     this.creation = creation;
-    this.profile = "My name is" + name;
+    this.profile = "My name is " + name;
   }
 
   /** Returns the ID of this User. */
