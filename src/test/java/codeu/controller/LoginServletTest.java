@@ -61,7 +61,7 @@ public class LoginServletTest {
     UserStore mockUserStore = Mockito.mock(UserStore.class);
     Mockito.when(mockUserStore.isUserRegistered("test_username")).thenReturn(true);
 
-    User u1 = new User(UUID.randomUUID(),"test_username", BCrypt.hashpw("password", BCrypt.gensalt()), Instant.now());
+    User u1 = new User(UUID.randomUUID(),"test_username", BCrypt.hashpw("password", BCrypt.gensalt()), Instant.now(), false);
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(u1);
 
     loginServlet.setUserStore(mockUserStore);
@@ -70,7 +70,7 @@ public class LoginServletTest {
     Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
 
     loginServlet.doPost(mockRequest, mockResponse);
-    
+
     Mockito.verify(mockRequest).setAttribute("error", "Invalid password.");
     Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
   }
@@ -114,13 +114,13 @@ public class LoginServletTest {
     Mockito.when(mockRequest.getParameter("password")).thenReturn("password");
     UserStore mockUserStore = Mockito.mock(UserStore.class);
     Mockito.when(mockUserStore.isUserRegistered("test_username")).thenReturn(true);
-    User u1 = new User(UUID.randomUUID(),"test_username", BCrypt.hashpw("password", BCrypt.gensalt()), Instant.now());
+    User u1 = new User(UUID.randomUUID(),"test_username", BCrypt.hashpw("password", BCrypt.gensalt()), Instant.now(), false);
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(u1);
 
     loginServlet.setUserStore(mockUserStore);
     HttpSession mockSession = Mockito.mock(HttpSession.class);
     Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
-  
+
     loginServlet.doPost(mockRequest, mockResponse);
     Mockito.verify(mockSession).setAttribute("user", "test_username");
     Mockito.verify(mockResponse).sendRedirect("/conversations");
