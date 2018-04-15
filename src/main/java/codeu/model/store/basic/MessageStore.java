@@ -101,6 +101,12 @@ public class MessageStore {
 
     return messagesInConversation;
   }
+  public List<String> getMessageStats() {
+    List<String> stats = new ArrayList<>();
+    stats.add("Messages: " + messages.size());
+    return stats;
+  }
+
 
   /** Sets the List of Messages stored by this MessageStore. */
   public void setMessages(List<Message> messages) {

@@ -113,6 +113,12 @@ public class ConversationStore {
     return null;
   }
 
+  public List<String> getConversationStats() {
+    List<String> stats = new ArrayList<>();
+    stats.add("Conversations: " + conversations.size());
+    return stats;
+  }
+
   /** Sets the List of Conversations stored by this ConversationStore. */
   public void setConversations(List<Conversation> conversations) {
     this.conversations = conversations;

@@ -13,6 +13,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --%>
+
   <!DOCTYPE html>
   <html>
 
@@ -32,6 +33,7 @@
         <% } else{ %>
           <a href="/login">Login</a>
           <a href="/register">Register</a>
+          <a href="/admin">ADmin</a>
           <% } %>
             <a href="/about.jsp">About</a>
     </nav>

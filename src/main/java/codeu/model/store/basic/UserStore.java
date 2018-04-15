@@ -114,6 +114,13 @@ public class UserStore {
     return false;
   }
 
+  public List<String> getUserStats() {
+    List<String> stats = new ArrayList<>();
+    stats.add("Users: " + users.size());
+    return stats;
+    // get most active user
+  }
+
   /**
    * Sets the List of Users stored by this UserStore. This should only be called once, when the data
    * is loaded from Datastore.
