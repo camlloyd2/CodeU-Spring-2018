@@ -33,7 +33,7 @@
         <% } else{ %>
           <a href="/login">Login</a>
           <a href="/register">Register</a>
-          <a href="/admin">ADmin</a>
+          <a href="/admin">Admin</a>
           <% } %>
             <a href="/about.jsp">About</a>
     </nav>
