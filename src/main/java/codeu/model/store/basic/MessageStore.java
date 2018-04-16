@@ -17,6 +17,8 @@ package codeu.model.store.basic;
 import codeu.model.data.Message;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -101,9 +103,22 @@ public class MessageStore {
 
     return messagesInConversation;
   }
-  public List<String> getMessageStats() {
-    List<String> stats = new ArrayList<>();
-    stats.add("Messages: " + messages.size());
+  public HashMap<String, Object> getMessageStats() {
+    HashMap<String, Object> stats = new HashMap<>();
+    stats.put("Messages: ", messages.size());
+
+    /** Gets user who has sent the most messages. */
+    HashMap<UUID, Integer> userFreq = new HashMap<UUID, Integer>();
+    for (Message message : messages) {
+      UUID author = message.getAuthorId();
+      if (userFreq.keySet().contains(author)) {
+        userFreq.put(author, userFreq.get(author) + 1);
+      } else {
+        userFreq.put(author, 1);
+      }
+    }
+    UUID mostActive = Collections.max(userFreq.entrySet(), HashMap.Entry.comparingByValue()).getKey();
+    stats.put("Most Active User: ", mostActive);
     return stats;
   }
 

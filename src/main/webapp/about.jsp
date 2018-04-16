@@ -33,11 +33,7 @@
         <% } else{ %>
           <a href="/login">Login</a>
           <a href="/register">Register</a>
-<<<<<<< HEAD
           <a href="/admin">Admin</a>
-=======
-          <a href="/admin">ADmin</a>
->>>>>>> 284dec307db499b8cc20f910fdc71d2dc2cb3e89
           <% } %>
             <a href="/about.jsp">About</a>
     </nav>

@@ -1,9 +1,10 @@
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.HashMap" %>
 <%@ page import="codeu.model.data.Conversation" %>
 <%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%
-List<String> statistics = (List<String>) request.getAttribute("statistics");
+HashMap<String, Object> statistics = (HashMap<String, Object>) request.getAttribute("statistics");
 %>
 
 <!DOCTYPE html>
@@ -20,7 +21,6 @@ List<String> statistics = (List<String>) request.getAttribute("statistics");
   </style>
 </head>
 <body>
-<<<<<<< HEAD
         <nav>
             <a id="navTitle" href="/">CodeU Chat App</a>
             <a href="/conversations">Conversations</a>
@@ -38,24 +38,15 @@ List<String> statistics = (List<String>) request.getAttribute("statistics");
  <h3>Site Statistics</h3>
  <p> Here are some site stats:</p>
  <div id="stats">
-=======
- <h1>Admin</h1>
- <p>Temporary jsp. Bigger and better coming soon!</p>
- <div id-"stats">
->>>>>>> 284dec307db499b8cc20f910fdc71d2dc2cb3e89
      <ul>
   <%
-        for (String stat : statistics) {
+        for (HashMap.Entry<String, Object> stat : statistics.entrySet()) {
       %>
-      <li><%= stat %></li>
+      <li><%= stat.getKey() %><%= stat.getValue() %></li>
       <%
      }
       %>
      </ul>
  </div>
-<<<<<<< HEAD
- </div>
-=======
->>>>>>> 284dec307db499b8cc20f910fdc71d2dc2cb3e89
 </body>
 </html>

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
+import java.util.HashMap;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -58,10 +59,13 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
-      List<String> stats = new ArrayList<>();
-      stats.addAll(userStore.getUserStats());
-      stats.addAll(conversationStore.getConversationStats());
-      stats.addAll(messageStore.getMessageStats());
+      HashMap<String, Object> stats = new HashMap<String, Object>();
+      stats.putAll(userStore.getUserStats());
+      stats.putAll(conversationStore.getConversationStats());
+      stats.putAll(messageStore.getMessageStats());
+      //UUID mostActiveID = (UUID) stats.get("Most Active User: ");
+      //User mostActiveUser = userStore.getUser(mostActiveID);
+      //stats.put("Most Active User: ", mostActiveUser.getName());
       request.setAttribute("statistics", stats);
       request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
   }

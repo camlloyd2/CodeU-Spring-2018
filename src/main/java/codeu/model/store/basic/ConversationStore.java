@@ -18,6 +18,7 @@ import codeu.model.data.Conversation;
 import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -113,9 +114,9 @@ public class ConversationStore {
     return null;
   }
 
-  public List<String> getConversationStats() {
-    List<String> stats = new ArrayList<>();
-    stats.add("Conversations: " + conversations.size());
+  public HashMap<String, Object> getConversationStats() {
+    HashMap<String, Object> stats = new HashMap<String, Object>();
+    stats.put("Conversations: " , conversations.size());
     return stats;
   }
 

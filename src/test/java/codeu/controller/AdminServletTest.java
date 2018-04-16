@@ -15,6 +15,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 public class AdminServletTest {
 
   private AdminServlet adminServlet;
@@ -46,10 +48,10 @@ public class AdminServletTest {
     @Test
     public void testDoGet() throws IOException, ServletException {
       adminServlet.doGet(mockRequest, mockResponse);
-      List<String> fakeStats = new ArrayList<>();
-      fakeStats.addAll(mockUserStore.getUserStats());
-      fakeStats.addAll(mockConversationStore.getConversationStats());
-      fakeStats.addAll(mockMessageStore.getMessageStats());
+      HashMap<String, Object> fakeStats = new HashMap<String, Object>();
+      fakeStats.putAll(mockUserStore.getUserStats());
+      fakeStats.putAll(mockConversationStore.getConversationStats());
+      fakeStats.putAll(mockMessageStore.getMessageStats());
       Mockito.verify(mockRequest).setAttribute("statistics", fakeStats);
       Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
     }
