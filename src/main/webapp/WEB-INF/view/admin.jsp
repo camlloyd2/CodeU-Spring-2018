@@ -20,6 +20,7 @@ List<String> statistics = (List<String>) request.getAttribute("statistics");
   </style>
 </head>
 <body>
+<<<<<<< HEAD
         <nav>
             <a id="navTitle" href="/">CodeU Chat App</a>
             <a href="/conversations">Conversations</a>
@@ -37,6 +38,11 @@ List<String> statistics = (List<String>) request.getAttribute("statistics");
  <h3>Site Statistics</h3>
  <p> Here are some site stats:</p>
  <div id="stats">
+=======
+ <h1>Admin</h1>
+ <p>Temporary jsp. Bigger and better coming soon!</p>
+ <div id-"stats">
+>>>>>>> 284dec307db499b8cc20f910fdc71d2dc2cb3e89
      <ul>
   <%
         for (String stat : statistics) {
@@ -47,6 +53,9 @@ List<String> statistics = (List<String>) request.getAttribute("statistics");
       %>
      </ul>
  </div>
+<<<<<<< HEAD
  </div>
+=======
+>>>>>>> 284dec307db499b8cc20f910fdc71d2dc2cb3e89
 </body>
 </html>
