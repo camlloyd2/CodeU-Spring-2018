@@ -21,6 +21,6 @@ public class AdminServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
-      response.getWriter().println("<h1>AdminServlet GET request.</h1>");
+      request.getRequestDispatcher("/WEB-INF/view/admin.jsp").forward(request, response);
   }
 }

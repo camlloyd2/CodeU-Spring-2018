@@ -1,7 +1,7 @@
 /*
  * RegisterServlet.java
  * This code uses the request.getRequestDispatcher() function to output the
- * register.jsp file 
+ * register.jsp file
  */
 
 package codeu.controller;
@@ -26,7 +26,7 @@ public class RegisterServlet extends HttpServlet {
   * Store class that gives access to Users.
   */
  private UserStore userStore;
- 
+
  /**
   * Set up state for handling registration-related requests. This method is only called when
   * running in a server, not when running in a test.
@@ -36,7 +36,7 @@ public class RegisterServlet extends HttpServlet {
    super.init();
    setUserStore(UserStore.getInstance());
  }
- 
+
  /**
   * Sets the UserStore used by this servlet. This function provides a common setup method
   * for use by the test framework or the servlet's init() function.
@@ -79,11 +79,10 @@ public class RegisterServlet extends HttpServlet {
      return;
    }
 
-   User user = new User(UUID.randomUUID(), username, passwordHash, Instant.now());
+   User user = new User(UUID.randomUUID(), username, passwordHash, Instant.now(), false);
    userStore.addUser(user);
 
    response.sendRedirect("/login");
  }
 
 }
-
