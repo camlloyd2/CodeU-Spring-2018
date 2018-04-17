@@ -43,7 +43,7 @@ public class User {
     this.name = name;
     this.hashedPassword = password;
     this.creation = creation;
-    this.profile = "My name is " + name;
+    this.profile = "";
   }
 
   /** Returns the ID of this User. */
@@ -65,10 +65,12 @@ public class User {
     return creation;
   }
 
+  /** Returns the profile content of this User. */
   public String getProfile() {
     return profile;
   }
 
+  /** Allows the user to set profile content. */
   public void setProfile(String profile) {
     this.profile = profile;
   }
