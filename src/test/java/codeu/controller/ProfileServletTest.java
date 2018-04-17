@@ -29,6 +29,8 @@ public class ProfileServletTest {
  private HttpSession mockSession;
  private RequestDispatcher mockRequestDispatcher;
  private UserStore mockUserStore;
+ private User mockUser;
+
 
  @Before
  public void setup() throws IOException {
@@ -40,8 +42,11 @@ public class ProfileServletTest {
    mockSession = Mockito.mock(HttpSession.class);
    Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
 
+   mockUser = Mockito.mock(User.class);
+
    mockUserStore = Mockito.mock(UserStore.class);
    profileServlet.setUserStore(mockUserStore);
+
 
    Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/profile.jsp"))
    .thenReturn(mockRequestDispatcher);
@@ -76,14 +81,14 @@ public class ProfileServletTest {
 
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
-/*
+
   @Test
   public void testDoPost_UserNotLoggedIn() throws IOException, ServletException {
     Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
 
     profileServlet.doPost(mockRequest, mockResponse);
 
-    Mockito.verify(Mockito.any(User.class), Mockito.never()).setProfile(Mockito.any(String.class));
+    Mockito.verify(mockUser, Mockito.never()).setProfile(Mockito.any(String.class));
 
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
@@ -95,7 +100,7 @@ public class ProfileServletTest {
 
     profileServlet.doPost(mockRequest, mockResponse);
 
-    Mockito.verify(Mockito.any(User.class), Mockito.never()).setProfile(Mockito.any(String.class));
+    Mockito.verify(mockUser, Mockito.never()).setProfile(Mockito.any(String.class));
 
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
@@ -105,8 +110,8 @@ public class ProfileServletTest {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_username");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
-    User fakeUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+    //User fakeUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
 
     String fakeProfile = "sghow eihgo w48g92 iegw1";
     Mockito.when(mockRequest.getParameter("profile")).thenReturn(fakeProfile);
@@ -115,9 +120,9 @@ public class ProfileServletTest {
 
 
     ArgumentCaptor<String> profileArgumentCaptor = ArgumentCaptor.forClass(String.class);
-    Assert.assertEquals("sghow eihgo w48g92 iegw1", profileArgumentCaptor.getValue());
+    Mockito.verify(mockUser).setProfile(profileArgumentCaptor.capture());
 
-    Mockito.verify(fakeUser).setProfile(profileArgumentCaptor.capture());
+    Assert.assertEquals("sghow eihgo w48g92 iegw1", profileArgumentCaptor.getValue());
 
 
     Mockito.verify(mockResponse).sendRedirect("/profile/test_username");
@@ -126,24 +131,24 @@ public class ProfileServletTest {
   @Test
   public void testDoPost_CleansHtmlContent() throws IOException, ServletException {
    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_username");
-    Mockito.
-    when(mockSession.getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
-    User fakeUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+    //User fakeUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
 
-     String fakeProfile = "Contains <b>html</b> and <script>JavaScript</script> content.";
+    String fakeProfile = "Contains <b>html</b> and <script>JavaScript</script> content.";
  
     Mockito.when(mockRequest.getParameter("profile")).thenReturn(fakeProfile);
 
     profileServlet.doPost(mockRequest, mockResponse);
 
     ArgumentCaptor<String> profileArgumentCaptor = ArgumentCaptor.forClass(String.class);
+
+    Mockito.verify(mockUser).setProfile(profileArgumentCaptor.capture());
     Assert.assertEquals("Contains html and  content.", profileArgumentCaptor.getValue());
 
-    Mockito.verify(fakeUser).setProfile(profileArgumentCaptor.capture());
 
     Mockito.verify(mockResponse).sendRedirect("/profile/test_username");
   }
-  */
+  
 }

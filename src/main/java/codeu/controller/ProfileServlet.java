@@ -66,7 +66,7 @@ public class ProfileServlet extends HttpServlet {
     request.setAttribute("user", user);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
   }
-/*
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
@@ -97,5 +97,5 @@ public class ProfileServlet extends HttpServlet {
     response.sendRedirect("/profile/" + username);
   }
 
-   */
+   
 }
