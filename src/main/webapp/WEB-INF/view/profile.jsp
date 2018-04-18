@@ -9,6 +9,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.data.Conversation" %>
+<%@ page import="codeu.model.store.basic.UserStore" %>
+<%
+  User user = (User)request.getAttribute("user");
+%>
 
 <!DOCTYPE html>
 <html>
@@ -16,67 +20,57 @@
   <title>Profile</title>
   <link rel="stylesheet" href="/css/main.css">
 </head>
+
 <body>
 
   <nav>
     <a id="navTitle" href="/">CodeU Chat App</a>
     <a href="/conversations">Conversations</a>
-    <% if(request.getSession().getAttribute("user") != null){ %>
-      <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
+    <% if(request.getAttribute("user") != null){ %>
+      <a>Hello <%= user.getName() %>!</a>
     <% } %>
 
     <a href="/about.jsp">About</a>
   </nav>
 
-  <h1>Yep it works!</h1>
-<%--
+
   <div id="container">
 
     <% if(request.getAttribute("error") != null){ %>
         <h2 style="color:red"><%= request.getAttribute("error") %></h2>
     <% } %>
 
-    <% if(request.getSession().getAttribute("user") != null){ %>
-      <h1>New Conversation</h1>
-      <form action="/conversations" method="POST">
-          <div class="form-group">
-            <label class="form-control-label">Title:</label>
-          <input type="text" name="conversationTitle">
-        </div>
+    <% if(request.getAttribute("user") != null){ %>
+      <h1><%= user.getName() %>'s Profile Page</h1>
 
-        <button type="submit">Create</button>
+      <hr/>
+
+      <h2>About <%= user.getName() %></h2>
+      <p style="width: 800px; word-wrap: break-word">
+        <%
+          String profile = UserStore.getInstance().getUser(user.getName()).getProfile();
+          System.out.println("Profile:"+ profile);
+        %>
+        <%= profile %>
+      </p>
+
+      <form action="/profile/<%= user.getName()%>" method="POST">
+        <div class="form-group">
+          <h3>Edit your About Me (only you can see this)</h3>
+
+          <textarea style="height:100px;width:100%;font-family:Arial;border:1px solid #a6a6a6; background-color:white; resize:none" wrap="hard" size="1000" placeholder="1000 character limit..." maxlength="1000" type="text" name="profile"></textarea>
+
+        </div>
+        <br>
+        <button type="submit">Submit</button>
       </form>
 
       <hr/>
     <% } %>
 
-    <h1>Conversations</h1>
 
-    <%
-    List<Conversation> conversations =
-      (List<Conversation>) request.getAttribute("conversations");
-    if(conversations == null || conversations.isEmpty()){
-    %>
-      <p>Create a conversation to get started.</p>
-    <%
-    }
-    else{
-    %>
-      <ul class="mdl-list">
-    <%
-      for(Conversation conversation : conversations){
-    %>
-      <li><a href="/chat/<%= conversation.getTitle() %>">
-        <%= conversation.getTitle() %></a></li>
-    <%
-      }
-    %>
-      </ul>
-    <%
-    }
-    %>
-    <hr/>
   </div>
-  --%>
+
+
 </body>
 </html>
