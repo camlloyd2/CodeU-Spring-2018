@@ -91,7 +91,7 @@ public class ProfileServlet extends HttpServlet {
     // this removes any HTML from the message content
     String cleanedProfileContent = Jsoup.clean(profileContent, Whitelist.none());
 
-    user.setProfile(cleanedProfileContent);
+    userStore.updateUserProfile(user, cleanedProfileContent);
 
     // redirect to a GET request
     response.sendRedirect("/profile/" + username);

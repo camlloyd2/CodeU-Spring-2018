@@ -37,12 +37,12 @@ public class User {
    * @param creation the creation time of this User
    * @param admin the admin property of this User
    */
-  public User(UUID id, String name, String password, Instant creation, boolean admin) {
+  public User(UUID id, String name, String password, String profile, Instant creation, boolean admin) {
     this.id = id;
     this.name = name;
     this.hashedPassword = password;
     this.creation = creation;
-    this.profile = "";
+    this.profile = profile;
     this.admin = admin;
   }
 
@@ -74,6 +74,7 @@ public class User {
   /** Allows the user to set profile content. */
   public void setProfile(String profile) {
     this.profile = profile;
+  }
 
   /** Returns the admin property of this User. */
   public boolean getAdmin() {
