@@ -12,6 +12,7 @@
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%
   User user = (User)request.getAttribute("user");
+  //String currentUsername = request.getSession().getAttribute("user");
 %>
 
 <!DOCTYPE html>
@@ -26,8 +27,8 @@
   <nav>
     <a id="navTitle" href="/">CodeU Chat App</a>
     <a href="/conversations">Conversations</a>
-    <% if(request.getAttribute("user") != null){ %>
-      <a>Hello <%= user.getName() %>!</a>
+    <% if(request.getSession().getAttribute("user") != null){ %>
+      <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
     <% } %>
 
     <a href="/about.jsp">About</a>
@@ -58,6 +59,8 @@
         <%= profile %>
       </p>
 
+      <% if (request.getSession().getAttribute("user").equals(user.getName())) { %>
+
       <form action="/profile/<%= user.getName()%>" method="POST">
         <div class="form-group">
           <h3>Edit your <b>About Me</b> (only you can see this)</h3>
@@ -68,6 +71,7 @@
         <br>
         <button type="submit">Submit</button>
       </form>
+      <% } %>
 
       <hr/>
     <% } %>

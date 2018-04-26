@@ -62,7 +62,7 @@ public class ProfileServletTest {
    User fakeUser = new User(fakeUserId, "test_user", "test_password", "test_profile", Instant.now(), false);
 
    Mockito.when(mockUserStore.getUser("test_user")).thenReturn(fakeUser);
-
+   Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("test_user");
 
 
    profileServlet.doGet(mockRequest, mockResponse);
@@ -70,6 +70,22 @@ public class ProfileServletTest {
    Mockito.verify(mockRequest).setAttribute("user", fakeUser);
    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
  }
+
+  @Test
+  public void testDoGet_UserNotLoggedIn() throws IOException, ServletException {
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/user_not_login");
+    
+    UUID fakeUserId = UUID.randomUUID();
+
+   User fakeUser = new User(fakeUserId, "user_not_login", "test_password", "test_profile", Instant.now(), false);
+
+   Mockito.when(mockUserStore.getUser("user_not_login")).thenReturn(fakeUser);
+   Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn(null);
+
+   profileServlet.doGet(mockRequest, mockResponse);
+
+   Mockito.verify(mockResponse).sendRedirect("/login");
+  }
 
  @Test
   public void testDoGet_badUser() throws IOException, ServletException {
@@ -82,16 +98,6 @@ public class ProfileServletTest {
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
 
-  @Test
-  public void testDoPost_UserNotLoggedIn() throws IOException, ServletException {
-    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
-
-    profileServlet.doPost(mockRequest, mockResponse);
-
-    Mockito.verify(mockUserStore, Mockito.never()).updateUserProfile(Mockito.any(User.class), Mockito.any(String.class));
-
-    Mockito.verify(mockResponse).sendRedirect("/login");
-  }
 
   @Test
   public void testDoPost_InvalidUser() throws IOException, ServletException {

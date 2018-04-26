@@ -49,6 +49,7 @@ public class ProfileServlet extends HttpServlet {
  @Override
  public void doGet(HttpServletRequest request, HttpServletResponse response)
      throws IOException, ServletException {
+
     String requestUrl = request.getRequestURI();
     System.out.println("requestUrl:" + requestUrl);
 
@@ -63,8 +64,17 @@ public class ProfileServlet extends HttpServlet {
       return;
     }
 
+    if (request.getSession().getAttribute("user") == null){
+      System.out.println("User not logged in: " + userName);
+      response.sendRedirect("/login");
+      return;
+    }
+
     request.setAttribute("user", user);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
+
+    System.out.println("Get Attribute: " + request.getAttribute("user"));
+      System.out.println("Get Session Attribute: " + request.getSession().getAttribute("user"));
   }
 
   @Override
