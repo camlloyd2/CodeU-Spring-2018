@@ -99,6 +99,13 @@ public class UserStore {
     return null;
   }
 
+  /** Update the profile of a given user. */
+  public void updateUserProfile(User user, String profile) {
+    user.setProfile(profile);
+    persistentStorageAgent.writeThrough(user);
+  }
+
+
   /** Add a new user to the current set of users known to the application. */
   public void addUser(User user) {
     users.add(user);

@@ -26,14 +26,16 @@ public class UserTest {
     UUID id = UUID.randomUUID();
     String name = "test_username";
     String password = "password";
+    String profile = "---";
     Instant creation = Instant.now();
     boolean admin = false;
 
-    User user = new User(id, name, password, creation, admin);
+    User user = new User(id, name, password, profile, creation, admin);
 
     Assert.assertEquals(id, user.getId());
     Assert.assertEquals(name, user.getName());
     Assert.assertEquals(password, user.getPassword());
+    Assert.assertEquals(profile, user.getProfile());
     Assert.assertEquals(creation, user.getCreationTime());
     Assert.assertEquals(admin, user.getAdmin());
   }

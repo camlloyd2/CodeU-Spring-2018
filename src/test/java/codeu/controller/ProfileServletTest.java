@@ -29,7 +29,7 @@ public class ProfileServletTest {
  private HttpSession mockSession;
  private RequestDispatcher mockRequestDispatcher;
  private UserStore mockUserStore;
- private User mockUser;
+ //private User mockUser;
 
 
  @Before
@@ -42,7 +42,7 @@ public class ProfileServletTest {
    mockSession = Mockito.mock(HttpSession.class);
    Mockito.when(mockRequest.getSession()).thenReturn(mockSession);
 
-   mockUser = Mockito.mock(User.class);
+   //mockUser = Mockito.mock(User.class);
 
    mockUserStore = Mockito.mock(UserStore.class);
    profileServlet.setUserStore(mockUserStore);
@@ -59,10 +59,10 @@ public class ProfileServletTest {
 
    UUID fakeUserId = UUID.randomUUID();
 
-   User fakeUser = new User(fakeUserId, "test_user", "test_password", Instant.now());
+   User fakeUser = new User(fakeUserId, "test_user", "test_password", "test_profile", Instant.now(), false);
 
    Mockito.when(mockUserStore.getUser("test_user")).thenReturn(fakeUser);
-
+   Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("test_user");
 
 
    profileServlet.doGet(mockRequest, mockResponse);
@@ -70,6 +70,22 @@ public class ProfileServletTest {
    Mockito.verify(mockRequest).setAttribute("user", fakeUser);
    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
  }
+
+  @Test
+  public void testDoGet_UserNotLoggedIn() throws IOException, ServletException {
+    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/user_not_login");
+    
+    UUID fakeUserId = UUID.randomUUID();
+
+   User fakeUser = new User(fakeUserId, "user_not_login", "test_password", "test_profile", Instant.now(), false);
+
+   Mockito.when(mockUserStore.getUser("user_not_login")).thenReturn(fakeUser);
+   Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn(null);
+
+   profileServlet.doGet(mockRequest, mockResponse);
+
+   Mockito.verify(mockResponse).sendRedirect("/login");
+  }
 
  @Test
   public void testDoGet_badUser() throws IOException, ServletException {
@@ -82,16 +98,6 @@ public class ProfileServletTest {
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
 
-  @Test
-  public void testDoPost_UserNotLoggedIn() throws IOException, ServletException {
-    Mockito.when(mockSession.getAttribute("user")).thenReturn(null);
-
-    profileServlet.doPost(mockRequest, mockResponse);
-
-    Mockito.verify(mockUser, Mockito.never()).setProfile(Mockito.any(String.class));
-
-    Mockito.verify(mockResponse).sendRedirect("/login");
-  }
 
   @Test
   public void testDoPost_InvalidUser() throws IOException, ServletException {
@@ -100,7 +106,7 @@ public class ProfileServletTest {
 
     profileServlet.doPost(mockRequest, mockResponse);
 
-    Mockito.verify(mockUser, Mockito.never()).setProfile(Mockito.any(String.class));
+    Mockito.verify(mockUserStore, Mockito.never()).updateUserProfile(Mockito.any(User.class), Mockito.any(String.class));
 
     Mockito.verify(mockResponse).sendRedirect("/login");
   }
@@ -110,8 +116,8 @@ public class ProfileServletTest {
     Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_username");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
-    //User fakeUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
+    User fakeUser = new User(UUID.randomUUID(), "test_username", "password", "---", Instant.now(), false);
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     String fakeProfile = "sghow eihgo w48g92 iegw1";
     Mockito.when(mockRequest.getParameter("profile")).thenReturn(fakeProfile);
@@ -120,7 +126,9 @@ public class ProfileServletTest {
 
 
     ArgumentCaptor<String> profileArgumentCaptor = ArgumentCaptor.forClass(String.class);
-    Mockito.verify(mockUser).setProfile(profileArgumentCaptor.capture());
+    ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+
+    Mockito.verify(mockUserStore).updateUserProfile(userArgumentCaptor.capture(), profileArgumentCaptor.capture());
 
     Assert.assertEquals("sghow eihgo w48g92 iegw1", profileArgumentCaptor.getValue());
 
@@ -133,8 +141,8 @@ public class ProfileServletTest {
    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_username");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
-    //User fakeUser = new User(UUID.randomUUID(), "test_username", "password", Instant.now());
-    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(mockUser);
+    User fakeUser = new User(UUID.randomUUID(), "test_username", "password", "---", Instant.now(), false);
+    Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
 
     String fakeProfile = "Contains <b>html</b> and <script>JavaScript</script> content.";
  
@@ -143,8 +151,9 @@ public class ProfileServletTest {
     profileServlet.doPost(mockRequest, mockResponse);
 
     ArgumentCaptor<String> profileArgumentCaptor = ArgumentCaptor.forClass(String.class);
+    ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
 
-    Mockito.verify(mockUser).setProfile(profileArgumentCaptor.capture());
+    Mockito.verify(mockUserStore).updateUserProfile(userArgumentCaptor.capture(), profileArgumentCaptor.capture());
     Assert.assertEquals("Contains html and  content.", profileArgumentCaptor.getValue());
 
 

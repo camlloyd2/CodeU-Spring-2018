@@ -12,6 +12,7 @@
 <%@ page import="codeu.model.store.basic.UserStore" %>
 <%
   User user = (User)request.getAttribute("user");
+  //String currentUsername = request.getSession().getAttribute("user");
 %>
 
 <!DOCTYPE html>
@@ -26,8 +27,8 @@
   <nav>
     <a id="navTitle" href="/">CodeU Chat App</a>
     <a href="/conversations">Conversations</a>
-    <% if(request.getAttribute("user") != null){ %>
-      <a>Hello <%= user.getName() %>!</a>
+    <% if(request.getSession().getAttribute("user") != null){ %>
+      <a>Hello <%= request.getSession().getAttribute("user") %>!</a>
     <% } %>
 
     <a href="/about.jsp">About</a>
@@ -46,17 +47,23 @@
       <hr/>
 
       <h2>About <%= user.getName() %></h2>
-      <p style="width: 800px; word-wrap: break-word">
+      <p style="width: 800px; word-wrap: break-word;">
         <%
           String profile = UserStore.getInstance().getUser(user.getName()).getProfile();
+
+          if (profile==null)
+            profile = user.getName() + " has not set their \"About me\" yet.";
+
           System.out.println("Profile:"+ profile);
         %>
         <%= profile %>
       </p>
 
+      <% if (request.getSession().getAttribute("user").equals(user.getName())) { %>
+
       <form action="/profile/<%= user.getName()%>" method="POST">
         <div class="form-group">
-          <h3>Edit your About Me (only you can see this)</h3>
+          <h3>Edit your <b>About Me</b> (only you can see this)</h3>
 
           <textarea style="height:100px;width:100%;font-family:Arial;border:1px solid #a6a6a6; background-color:white; resize:none" wrap="hard" size="1000" placeholder="1000 character limit..." maxlength="1000" type="text" name="profile"></textarea>
 
@@ -64,6 +71,7 @@
         <br>
         <button type="submit">Submit</button>
       </form>
+      <% } %>
 
       <hr/>
     <% } %>
