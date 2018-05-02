@@ -65,9 +65,10 @@ public class PersistentDataStore {
         UUID uuid = UUID.fromString((String) entity.getProperty("uuid"));
         String userName = (String) entity.getProperty("username");
         String password = (String) entity.getProperty("password");
+        String profile = (String) entity.getProperty("profile");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
         // boolean admin = (Boolean) entity.getProperty("admin");
-        User user = new User(uuid, userName, password, creationTime, false);
+        User user = new User(uuid, userName, password, profile, creationTime, false);
         users.add(user);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -147,12 +148,21 @@ public class PersistentDataStore {
     return messages;
   }
 
+  public List<String> loadStatistics() throws PersistentDataStoreException {
+    List<String> statistics = new ArrayList<>();
+    statistics.add("Users: " + loadUsers().size());
+    statistics.add("Conversations: " + loadConversations().size());
+    statistics.add("Messages: " + loadMessages().size());
+    return statistics;
+  }
+ 
   /** Write a User object to the Datastore service. */
   public void writeThrough(User user) {
     Entity userEntity = new Entity("chat-users");
     userEntity.setProperty("uuid", user.getId().toString());
     userEntity.setProperty("username", user.getName());
     userEntity.setProperty("password", user.getPassword());
+    userEntity.setProperty("profile", user.getProfile());
     userEntity.setProperty("creation_time", user.getCreationTime().toString());
     datastore.put(userEntity);
   }

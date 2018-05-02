@@ -19,6 +19,7 @@ import codeu.model.store.persistence.PersistentStorageAgent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.HashMap;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -98,6 +99,13 @@ public class UserStore {
     return null;
   }
 
+  /** Update the profile of a given user. */
+  public void updateUserProfile(User user, String profile) {
+    user.setProfile(profile);
+    persistentStorageAgent.writeThrough(user);
+  }
+
+
   /** Add a new user to the current set of users known to the application. */
   public void addUser(User user) {
     users.add(user);
@@ -112,6 +120,12 @@ public class UserStore {
       }
     }
     return false;
+  }
+
+  public HashMap<String, Object> getUserStats() {
+    HashMap<String, Object> stats = new HashMap<String, Object>();
+    stats.put("Users: " ,users.size());
+    return stats;
   }
 
   /**

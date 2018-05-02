@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+
+
 package codeu.model.data;
 
 import java.time.Instant;
@@ -23,6 +25,7 @@ public class User {
   private final String name;
   private final String hashedPassword;
   private final Instant creation;
+  private String profile;
   private final boolean admin;
 
   /**
@@ -34,11 +37,12 @@ public class User {
    * @param creation the creation time of this User
    * @param admin the admin property of this User
    */
-  public User(UUID id, String name, String password, Instant creation, boolean admin) {
+  public User(UUID id, String name, String password, String profile, Instant creation, boolean admin) {
     this.id = id;
     this.name = name;
     this.hashedPassword = password;
     this.creation = creation;
+    this.profile = profile;
     this.admin = admin;
   }
 
@@ -60,6 +64,16 @@ public class User {
   /** Returns the creation time of this User. */
   public Instant getCreationTime() {
     return creation;
+  }
+
+  /** Returns the profile content of this User. */
+  public String getProfile() {
+    return profile;
+  }
+
+  /** Allows the user to set profile content. */
+  public void setProfile(String profile) {
+    this.profile = profile;
   }
 
   /** Returns the admin property of this User. */
