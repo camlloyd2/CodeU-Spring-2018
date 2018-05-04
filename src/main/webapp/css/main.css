@@ -19,7 +19,7 @@ body {
   line-height: 1.6;
   font-size: 18px;
   line-height: 1.6;
-  color: white;
+  color: black;
   background-color: rgb(95,158,160,.75);
 }
 
@@ -46,7 +46,7 @@ nav a {
 }
 
 h1 {
-  color: white;
+  color: black;
 }
 
 input {
