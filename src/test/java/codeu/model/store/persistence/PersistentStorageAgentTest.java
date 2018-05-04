@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import java.util.*;
 
 /**
  * Contains tests of the PersistentStorageAgent class. Currently that class is just a pass-through
@@ -54,7 +55,7 @@ public class PersistentStorageAgentTest {
   @Test
   public void testWriteThroughConversation() {
     Conversation conversation =
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+        new Conversation(UUID.randomUUID(), UUID.randomUUID(), new HashSet<UUID>(), "test_conversation", Instant.now());
     persistentStorageAgent.writeThrough(conversation);
     Mockito.verify(mockPersistentDataStore).writeThrough(conversation);
   }

@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import java.util.*;
 
 /**
  * Test class for PersistentDataStore. The PersistentDataStore class relies on DatastoreService,
@@ -73,13 +74,13 @@ public class PersistentDataStoreTest {
     UUID ownerOne = UUID.randomUUID();
     String titleOne = "Test_Title";
     Instant creationOne = Instant.ofEpochMilli(1000);
-    Conversation inputConversationOne = new Conversation(idOne, ownerOne, titleOne, creationOne);
+    Conversation inputConversationOne = new Conversation(idOne, ownerOne, new HashSet<UUID>(), titleOne, creationOne);
 
     UUID idTwo = UUID.randomUUID();
     UUID ownerTwo = UUID.randomUUID();
     String titleTwo = "Test_Title_Two";
     Instant creationTwo = Instant.ofEpochMilli(2000);
-    Conversation inputConversationTwo = new Conversation(idTwo, ownerTwo, titleTwo, creationTwo);
+    Conversation inputConversationTwo = new Conversation(idTwo, ownerTwo, new HashSet<UUID>(), titleTwo, creationTwo);
 
     // save
     persistentDataStore.writeThrough(inputConversationOne);

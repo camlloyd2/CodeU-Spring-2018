@@ -33,6 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import java.util.*;
 
 public class ConversationServletTest {
 
@@ -68,7 +69,7 @@ public class ConversationServletTest {
   public void testDoGet() throws IOException, ServletException {
     List<Conversation> fakeConversationList = new ArrayList<>();
     fakeConversationList.add(
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now()));
+        new Conversation(UUID.randomUUID(), UUID.randomUUID(), new HashSet<UUID>(), "test_conversation", Instant.now()));
     Mockito.when(mockConversationStore.getAllConversations()).thenReturn(fakeConversationList);
 
     conversationServlet.doGet(mockRequest, mockResponse);

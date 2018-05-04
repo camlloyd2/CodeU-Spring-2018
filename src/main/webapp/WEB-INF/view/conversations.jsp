@@ -50,7 +50,9 @@
       <form action="/conversations" method="POST">
           <div class="form-group">
             <label class="form-control-label">Title:</label>
-          <input type="text" name="conversationTitle">
+            <input type="text" name="conversationTitle">
+            <label class="form-control-label">Users:</label>
+            <input type="text" name="conversationUsers">
         </div>
 
         <button type="submit">Create</button>

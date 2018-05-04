@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import java.util.*;
 
 public class ConversationStoreTest {
 
@@ -18,7 +19,7 @@ public class ConversationStoreTest {
 
   private final Conversation CONVERSATION_ONE =
       new Conversation(
-          UUID.randomUUID(), UUID.randomUUID(), "conversation_one", Instant.ofEpochMilli(1000));
+          UUID.randomUUID(), UUID.randomUUID(), new HashSet<UUID>(),"conversation_one", Instant.ofEpochMilli(1000));
 
   @Before
   public void setup() {
@@ -62,7 +63,7 @@ public class ConversationStoreTest {
   @Test
   public void testAddConversation() {
     Conversation inputConversation =
-        new Conversation(UUID.randomUUID(), UUID.randomUUID(), "test_conversation", Instant.now());
+        new Conversation(UUID.randomUUID(), UUID.randomUUID(), new HashSet<UUID>(), "test_conversation", Instant.now());
 
     conversationStore.addConversation(inputConversation);
     Conversation resultConversation =
@@ -75,6 +76,7 @@ public class ConversationStoreTest {
   private void assertEquals(Conversation expectedConversation, Conversation actualConversation) {
     Assert.assertEquals(expectedConversation.getId(), actualConversation.getId());
     Assert.assertEquals(expectedConversation.getOwnerId(), actualConversation.getOwnerId());
+    Assert.assertEquals(expectedConversation.getUsers(), actualConversation.getUsers());
     Assert.assertEquals(expectedConversation.getTitle(), actualConversation.getTitle());
     Assert.assertEquals(
         expectedConversation.getCreationTime(), actualConversation.getCreationTime());

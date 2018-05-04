@@ -27,6 +27,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.*;
 
 /**
  * This class handles all interactions with Google App Engine's Datastore service. On startup it
@@ -101,7 +102,8 @@ public class PersistentDataStore {
         UUID ownerUuid = UUID.fromString((String) entity.getProperty("owner_uuid"));
         String title = (String) entity.getProperty("title");
         Instant creationTime = Instant.parse((String) entity.getProperty("creation_time"));
-        Conversation conversation = new Conversation(uuid, ownerUuid, title, creationTime);
+        //TODO: get users from datastore
+        Conversation conversation = new Conversation(uuid, ownerUuid, null,title, creationTime);
         conversations.add(conversation);
       } catch (Exception e) {
         // In a production environment, errors should be very rare. Errors which may
@@ -155,7 +157,7 @@ public class PersistentDataStore {
     statistics.add("Messages: " + loadMessages().size());
     return statistics;
   }
- 
+
   /** Write a User object to the Datastore service. */
   public void writeThrough(User user) {
     Entity userEntity = new Entity("chat-users");

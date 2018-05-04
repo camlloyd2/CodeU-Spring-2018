@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import org.mindrot.jbcrypt.BCrypt;
+import java.util.*;
 
 /**
  * This class makes it easy to add dummy data to your chat app instance. To use fake data, set
@@ -110,7 +111,7 @@ public class DefaultDataStore {
       User user = getRandomElement(users);
       String title = "Conversation_" + i;
       Conversation conversation =
-          new Conversation(UUID.randomUUID(), user.getId(), title, Instant.now());
+          new Conversation(UUID.randomUUID(), user.getId(), new HashSet<UUID>(),title, Instant.now());
       PersistentStorageAgent.getInstance().writeThrough(conversation);
       conversations.add(conversation);
     }

@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /** Servlet class responsible for the conversations page. */
 public class ConversationServlet extends HttpServlet {
@@ -113,8 +114,9 @@ public class ConversationServlet extends HttpServlet {
       return;
     }
 
+    //TODO: Add users to set of users permitted to conversation
     Conversation conversation =
-        new Conversation(UUID.randomUUID(), user.getId(), conversationTitle, Instant.now());
+        new Conversation(UUID.randomUUID(), user.getId(), new HashSet<UUID>(),conversationTitle, Instant.now());
 
     conversationStore.addConversation(conversation);
     response.sendRedirect("/chat/" + conversationTitle);
