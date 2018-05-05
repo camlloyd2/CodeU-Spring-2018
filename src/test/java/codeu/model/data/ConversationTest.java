@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.util.UUID;
 import org.junit.Assert;
 import org.junit.Test;
+import java.util.*;
 
 public class ConversationTest {
 
@@ -25,13 +26,15 @@ public class ConversationTest {
   public void testCreate() {
     UUID id = UUID.randomUUID();
     UUID owner = UUID.randomUUID();
+    Set<UUID> users = new HashSet<UUID>();
     String title = "Test_Title";
     Instant creation = Instant.now();
 
-    Conversation conversation = new Conversation(id, owner, title, creation);
+    Conversation conversation = new Conversation(id, owner, users, title, creation);
 
     Assert.assertEquals(id, conversation.getId());
     Assert.assertEquals(owner, conversation.getOwnerId());
+    Assert.assertEquals(users, conversation.getUsers());
     Assert.assertEquals(title, conversation.getTitle());
     Assert.assertEquals(creation, conversation.getCreationTime());
   }

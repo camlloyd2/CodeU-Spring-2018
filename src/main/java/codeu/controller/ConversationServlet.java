@@ -26,6 +26,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 
 /** Servlet class responsible for the conversations page. */
 public class ConversationServlet extends HttpServlet {
@@ -100,6 +101,22 @@ public class ConversationServlet extends HttpServlet {
     }
 
     String conversationTitle = request.getParameter("conversationTitle");
+    String conversationUsers =  request.getParameter("conversationUsers");
+
+    // Retrieving users
+    conversationUsers = conversationUsers.replaceAll("\\s+","");
+    List<String> members = Arrays.asList(conversationUsers.split("\\s*,\\s*"));
+    Set<UUID> users = new HashSet<UUID>();
+    users.add(user.getId()); //adds creator
+    for (String uname : members) {
+      User u = userStore.getUser(uname);
+      // if user doesn't exist, ignore and don't add them to conversation
+      if (u != null) {
+        users.add(u.getId());
+      }
+    }
+
+
     if (!conversationTitle.matches("[\\w*]*")) {
       request.setAttribute("error", "Please enter only letters and numbers.");
       request.getRequestDispatcher("/WEB-INF/view/conversations.jsp").forward(request, response);
@@ -113,8 +130,9 @@ public class ConversationServlet extends HttpServlet {
       return;
     }
 
+    //TODO: Add users to set of users permitted to conversation
     Conversation conversation =
-        new Conversation(UUID.randomUUID(), user.getId(), conversationTitle, Instant.now());
+        new Conversation(UUID.randomUUID(), user.getId(), users,conversationTitle, Instant.now());
 
     conversationStore.addConversation(conversation);
     response.sendRedirect("/chat/" + conversationTitle);

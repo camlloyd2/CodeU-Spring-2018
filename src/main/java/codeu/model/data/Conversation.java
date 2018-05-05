@@ -14,6 +14,7 @@
 
 package codeu.model.data;
 
+import java.util.*;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ import java.util.UUID;
 public class Conversation {
   public final UUID id;
   public final UUID owner;
+  public final Set<UUID> users;
   public final Instant creation;
   public final String title;
 
@@ -35,9 +37,10 @@ public class Conversation {
    * @param title the title of this Conversation
    * @param creation the creation time of this Conversation
    */
-  public Conversation(UUID id, UUID owner, String title, Instant creation) {
+  public Conversation(UUID id, UUID owner, Set<UUID> users, String title, Instant creation) {
     this.id = id;
     this.owner = owner;
+    this.users = users;
     this.creation = creation;
     this.title = title;
   }
@@ -50,6 +53,11 @@ public class Conversation {
   /** Returns the ID of the User who created this Conversation. */
   public UUID getOwnerId() {
     return owner;
+  }
+
+  /** Returns the IDs of the users who have access to this conversation */
+  public Set<UUID> getUsers() {
+    return users;
   }
 
   /** Returns the title of this Conversation. */
