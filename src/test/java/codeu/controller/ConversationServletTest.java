@@ -92,7 +92,14 @@ public class ConversationServletTest {
   @Test
   public void testDoPost_InvalidUser() throws IOException, ServletException {
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
+    Mockito.when(mockRequest.getParameter("conversationUsers")).thenReturn("user1,user2,user3");
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(null);
+    User fakeUser1 = new User(UUID.randomUUID(), "user1", "password", "test_profile", Instant.now(), false);
+    User fakeUser2 = new User(UUID.randomUUID(), "user2", "password", "test_profile", Instant.now(), false);
+    User fakeUser3 = new User(UUID.randomUUID(), "user3", "password", "test_profile", Instant.now(), false);
+    Mockito.when(mockUserStore.getUser("user1")).thenReturn(fakeUser1);
+    Mockito.when(mockUserStore.getUser("user2")).thenReturn(fakeUser2);
+    Mockito.when(mockUserStore.getUser("user3")).thenReturn(fakeUser3);
 
     conversationServlet.doPost(mockRequest, mockResponse);
 
@@ -104,10 +111,17 @@ public class ConversationServletTest {
   @Test
   public void testDoPost_BadConversationName() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("conversationTitle")).thenReturn("bad !@#$% name");
+    Mockito.when(mockRequest.getParameter("conversationUsers")).thenReturn("user1,user2,user3");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser = new User(UUID.randomUUID(), "test_username", "password", "test_profile", Instant.now(), false);
+    User fakeUser1 = new User(UUID.randomUUID(), "user1", "password", "test_profile", Instant.now(), false);
+    User fakeUser2 = new User(UUID.randomUUID(), "user2", "password", "test_profile", Instant.now(), false);
+    User fakeUser3 = new User(UUID.randomUUID(), "user3", "password", "test_profile", Instant.now(), false);
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+    Mockito.when(mockUserStore.getUser("user1")).thenReturn(fakeUser1);
+    Mockito.when(mockUserStore.getUser("user2")).thenReturn(fakeUser2);
+    Mockito.when(mockUserStore.getUser("user3")).thenReturn(fakeUser3);
 
     conversationServlet.doPost(mockRequest, mockResponse);
 
@@ -120,10 +134,17 @@ public class ConversationServletTest {
   @Test
   public void testDoPost_ConversationNameTaken() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("conversationTitle")).thenReturn("test_conversation");
+    Mockito.when(mockRequest.getParameter("conversationUsers")).thenReturn("user1,user2,user3");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser = new User(UUID.randomUUID(), "test_username", "password", "test_profile", Instant.now(), false);
+    User fakeUser1 = new User(UUID.randomUUID(), "user1", "password", "test_profile", Instant.now(), false);
+    User fakeUser2 = new User(UUID.randomUUID(), "user2", "password", "test_profile", Instant.now(), false);
+    User fakeUser3 = new User(UUID.randomUUID(), "user3", "password", "test_profile", Instant.now(), false);
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+    Mockito.when(mockUserStore.getUser("user1")).thenReturn(fakeUser1);
+    Mockito.when(mockUserStore.getUser("user2")).thenReturn(fakeUser2);
+    Mockito.when(mockUserStore.getUser("user3")).thenReturn(fakeUser3);
 
     Mockito.when(mockConversationStore.isTitleTaken("test_conversation")).thenReturn(true);
 
@@ -137,10 +158,18 @@ public class ConversationServletTest {
   @Test
   public void testDoPost_NewConversation() throws IOException, ServletException {
     Mockito.when(mockRequest.getParameter("conversationTitle")).thenReturn("test_conversation");
+    Mockito.when(mockRequest.getParameter("conversationUsers")).thenReturn("user1,user2,user3");
     Mockito.when(mockSession.getAttribute("user")).thenReturn("test_username");
 
     User fakeUser = new User(UUID.randomUUID(), "test_username", "password", "test_profile", Instant.now(), false);
+    User fakeUser1 = new User(UUID.randomUUID(), "user1", "password", "test_profile", Instant.now(), false);
+    User fakeUser2 = new User(UUID.randomUUID(), "user2", "password", "test_profile", Instant.now(), false);
+    User fakeUser3 = new User(UUID.randomUUID(), "user3", "password", "test_profile", Instant.now(), false);
     Mockito.when(mockUserStore.getUser("test_username")).thenReturn(fakeUser);
+
+    Mockito.when(mockUserStore.getUser("user1")).thenReturn(fakeUser1);
+    Mockito.when(mockUserStore.getUser("user2")).thenReturn(fakeUser2);
+    Mockito.when(mockUserStore.getUser("user3")).thenReturn(fakeUser3);
 
     Mockito.when(mockConversationStore.isTitleTaken("test_conversation")).thenReturn(false);
 
