@@ -9,9 +9,12 @@
 <%@ page import="java.util.List" %>
 <%@ page import="codeu.model.data.User" %>
 <%@ page import="codeu.model.data.Conversation" %>
+<%@ page import="codeu.model.data.Message" %>
 <%@ page import="codeu.model.store.basic.UserStore" %>
+<%@ page import="codeu.model.store.basic.MessageStore" %>
 <%
   User user = (User)request.getAttribute("user");
+  List<Message> messages = (List<Message>)request.getAttribute("messages");
   //String currentUsername = request.getSession().getAttribute("user");
 %>
 
@@ -78,7 +81,16 @@
 
       <hr/>
     <% } %>
-
+    <h2> Recently sent messages</h2>
+    <ul>
+      <%
+            for (Message m : messages) {
+          %>
+          <li><%= m.getCreationTime().toString() + " " %>  <%= m.getContent() %></li>
+          <%
+         }
+          %>
+         </ul>
 
   </div>
 

@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.Comparator;
+import java.time.Instant;
 
 /**
  * Store class that uses in-memory data structures to hold values and automatically loads from and
@@ -102,6 +104,29 @@ public class MessageStore {
     }
 
     return messagesInConversation;
+  }
+
+
+// for sorting user messages 
+
+Comparator<Message> messageComparator = new Comparator<Message>() {
+    public int compare(Message o1, Message o2) {
+        int result = o2.getCreationTime().compareTo(o1.getCreationTime());
+        return result;
+
+    }
+};
+
+  public List<Message> getMessagesOfUser(UUID userID) {
+    List<Message> userMessages = new ArrayList<>();
+    for (Message m : messages) {
+      if (m.getAuthorId().equals(userID)) {
+        userMessages.add(m);
+      }
+    }
+    // sort by time
+    Collections.sort(userMessages, messageComparator);
+    return userMessages;
   }
   public HashMap<String, Object> getMessageStats() {
     HashMap<String, Object> stats = new HashMap<>();

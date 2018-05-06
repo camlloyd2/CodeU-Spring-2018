@@ -7,9 +7,13 @@
 package codeu.controller;
 
 import codeu.model.store.basic.UserStore;
+import codeu.model.store.basic.MessageStore;
 import codeu.model.data.User;
+import codeu.model.data.Message;
 import java.time.Instant;
 import java.util.UUID;
+import java.util.HashMap;
+import java.util.List;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,6 +31,7 @@ public class ProfileServlet extends HttpServlet {
   * Store class that gives access to Users.
   */
  private UserStore userStore;
+ private MessageStore messageStore;
  
  /**
   * Set up state for handling registration-related requests. This method is only called when
@@ -36,6 +41,7 @@ public class ProfileServlet extends HttpServlet {
  public void init() throws ServletException {
    super.init();
    setUserStore(UserStore.getInstance());
+   setMessageStore(MessageStore.getInstance());
  }
  
  /**
@@ -44,6 +50,10 @@ public class ProfileServlet extends HttpServlet {
   */
  public void setUserStore(UserStore userStore) {
    this.userStore = userStore;
+ }
+
+ public void setMessageStore(MessageStore messageStore) {
+   this.messageStore = messageStore;
  }
 
  @Override
@@ -69,12 +79,13 @@ public class ProfileServlet extends HttpServlet {
       response.sendRedirect("/login");
       return;
     }
-
+    List<Message> userMessages = messageStore.getMessagesOfUser(user.getId());
     request.setAttribute("user", user);
+    request.setAttribute("messages", userMessages);
     request.getRequestDispatcher("/WEB-INF/view/profile.jsp").forward(request, response);
 
     System.out.println("Get Attribute: " + request.getAttribute("user"));
-      System.out.println("Get Session Attribute: " + request.getSession().getAttribute("user"));
+    System.out.println("Get Session Attribute: " + request.getSession().getAttribute("user"));
   }
 
   @Override
