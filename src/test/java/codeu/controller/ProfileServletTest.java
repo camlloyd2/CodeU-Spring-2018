@@ -7,9 +7,13 @@ package codeu.controller;
 
 import codeu.model.data.User;
 import codeu.model.store.basic.UserStore;
+import codeu.model.data.Message;
+import codeu.model.store.basic.MessageStore;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +33,7 @@ public class ProfileServletTest {
  private HttpSession mockSession;
  private RequestDispatcher mockRequestDispatcher;
  private UserStore mockUserStore;
+  private MessageStore mockMessageStore;
  //private User mockUser;
 
 
@@ -45,7 +50,9 @@ public class ProfileServletTest {
    //mockUser = Mockito.mock(User.class);
 
    mockUserStore = Mockito.mock(UserStore.class);
+   mockMessageStore = Mockito.mock(MessageStore.class);
    profileServlet.setUserStore(mockUserStore);
+   profileServlet.setMessageStore(mockMessageStore);
 
 
    Mockito.when(mockRequest.getRequestDispatcher("/WEB-INF/view/profile.jsp"))
@@ -56,18 +63,20 @@ public class ProfileServletTest {
  @Test
  public void testDoGet() throws IOException, ServletException {
    Mockito.when(mockRequest.getRequestURI()).thenReturn("/profile/test_user");
-
+  List<Message> fakeMessages = new ArrayList<>();
    UUID fakeUserId = UUID.randomUUID();
 
    User fakeUser = new User(fakeUserId, "test_user", "test_password", "test_profile", Instant.now(), false);
 
    Mockito.when(mockUserStore.getUser("test_user")).thenReturn(fakeUser);
    Mockito.when(mockRequest.getSession().getAttribute("user")).thenReturn("test_user");
-
+    Mockito.when(mockMessageStore.getMessagesOfUser(fakeUser.getId())).thenReturn(fakeMessages);
+  Mockito.when(mockRequest.getSession().getAttribute("messages")).thenReturn(fakeMessages);
 
    profileServlet.doGet(mockRequest, mockResponse);
 
    Mockito.verify(mockRequest).setAttribute("user", fakeUser);
+   Mockito.verify(mockRequest).setAttribute("messages", fakeMessages);
    Mockito.verify(mockRequestDispatcher).forward(mockRequest, mockResponse);
  }
 
